@@ -1,0 +1,130 @@
+{
+    "projectId": "69488071000a97e72e06",
+    "endpoint": "https://fra.cloud.appwrite.io/v1",
+    "tablesDB": [
+        {
+            "$id": "694880d60027aeb11285",
+            "name": "spec builder",
+            "enabled": true
+        }
+    ],
+    "tables": [
+        {
+            "$id": "projects",
+            "$permissions": [],
+            "databaseId": "694880d60027aeb11285",
+            "name": "projects",
+            "enabled": true,
+            "rowSecurity": false,
+            "columns": [
+                {
+                    "key": "title",
+                    "type": "string",
+                    "required": true,
+                    "array": false,
+                    "size": 150,
+                    "default": null,
+                    "encrypt": false
+                },
+                {
+                    "key": "description",
+                    "type": "string",
+                    "required": true,
+                    "array": false,
+                    "size": 2000,
+                    "default": null,
+                    "encrypt": false
+                },
+                {
+                    "key": "problematic",
+                    "type": "string",
+                    "required": true,
+                    "array": false,
+                    "size": 2500,
+                    "default": null,
+                    "encrypt": false
+                },
+                {
+                    "key": "objectives",
+                    "type": "string",
+                    "required": true,
+                    "array": false,
+                    "size": 1500,
+                    "default": null,
+                    "encrypt": false
+                },
+                {
+                    "key": "features",
+                    "type": "string",
+                    "required": true,
+                    "array": false,
+                    "size": 200,
+                    "default": null,
+                    "encrypt": false
+                },
+                {
+                    "key": "constraints",
+                    "type": "string",
+                    "required": true,
+                    "array": false,
+                    "size": 1500,
+                    "default": null,
+                    "encrypt": false
+                },
+                {
+                    "key": "user",
+                    "type": "relationship",
+                    "required": false,
+                    "array": false,
+                    "relatedTable": "users",
+                    "relationType": "manyToOne",
+                    "twoWay": true,
+                    "twoWayKey": "projects",
+                    "onDelete": "cascade",
+                    "side": "parent"
+                }
+            ],
+            "indexes": []
+        },
+        {
+            "$id": "users",
+            "$permissions": [],
+            "databaseId": "694880d60027aeb11285",
+            "name": "users",
+            "enabled": true,
+            "rowSecurity": false,
+            "columns": [
+                {
+                    "key": "email",
+                    "type": "string",
+                    "required": true,
+                    "array": false,
+                    "format": "email",
+                    "default": null
+                },
+                {
+                    "key": "username",
+                    "type": "string",
+                    "required": true,
+                    "array": false,
+                    "size": 255,
+                    "default": null,
+                    "encrypt": false
+                },
+                {
+                    "key": "projects",
+                    "type": "relationship",
+                    "required": false,
+                    "array": false,
+                    "relatedTable": "projects",
+                    "relationType": "manyToOne",
+                    "twoWay": true,
+                    "twoWayKey": "user",
+                    "onDelete": "cascade",
+                    "side": "child"
+                }
+            ],
+            "indexes": []
+        }
+    ]
+}
