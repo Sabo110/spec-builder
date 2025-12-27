@@ -2,10 +2,9 @@
 
 import { Projects } from '@/types/appwrite'
 import { Button } from './ui/button'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { deleteProject } from '@/lib/client_functions/projects'
 import { toast } from 'sonner'
-import { QueryClient } from '@tanstack/react-query'
 
 type Props = {
     setOpen: (open: boolean) => void
@@ -15,7 +14,7 @@ export default function DeleteProject({ setOpen, project }: Props) {
     const mutation = useMutation({
         mutationFn: () => deleteProject(project.$id)
     })
-    const queryClient = new QueryClient()
+    const queryClient = useQueryClient()
     const handleDelete = () => {
         toast.promise(
             () => mutation.mutateAsync(),

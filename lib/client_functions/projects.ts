@@ -13,7 +13,7 @@ export const createProject = async (data: CreateProject) => {
         const error = await response.json() as { error: string }
         throw new Error(error.error)
     }
-    return await response.json() as Projects
+    return await response.json() as {message: string}
 }
 
 export const getProjects = async () => {

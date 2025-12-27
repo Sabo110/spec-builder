@@ -12,7 +12,7 @@ export async function POST(request: NextRequest) {
     }
     const result = await createProject(dataForDataBase)
     if (!result) return NextResponse.json({ error: "Internal Server Error" }, { status: 500 })
-    return NextResponse.json(result)
+    return NextResponse.json({ message: "Projet créé avec succès" })
 }
 
 export async function GET() {

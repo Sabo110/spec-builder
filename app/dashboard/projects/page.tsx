@@ -7,6 +7,7 @@ import { DataTable } from "./data-table";
 import { columns } from "./columns";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
+import { X } from "lucide-react";
 
 export default function page() {
   const { data, isPending, error } = useQuery({
@@ -14,16 +15,25 @@ export default function page() {
     queryFn: getProjects,
   })
   const [visible, setVisible] = useState(false)
+  const [viewProject, setViewProject] = useState(false)
   return (
     <div>
       <div className="flex justify-between items-center mb-4">
-        <h1>Projects</h1>
-        <Button onClick={() => setVisible(!visible)} className="cursor-pointer">{visible ? "Retour" : "Créer un projet"}</Button>
+        <h1> {!visible ? "Projets" : "Interface de creation de projet"}</h1>
+        {
+          !visible ? <Button onClick={() => setVisible(!visible)} className="cursor-pointer">Créer un projet</Button> : <X onClick={() => setVisible(!visible)} className="cursor-pointer" />
+        }
       </div>
-      {visible ? <ProjectForm /> : null}
+      {visible ? <ProjectForm setVisible={setVisible} /> : null}
       {!visible ? <div>
         <DataTable columns={columns} data={data ?? []} />
       </div> : null}
+      {
+        viewProject ?
+          <div>
+            view project
+          </div> : null
+      }
     </div>
   )
 }

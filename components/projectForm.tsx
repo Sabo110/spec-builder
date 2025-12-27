@@ -8,16 +8,17 @@ import { FormTextarea } from "./forms/FormTextarea"
 import { Button } from "./ui/button"
 import { Projects } from "@/types/appwrite"
 import FieldArray from "./forms/FieldArray"
-import { useMutation } from "@tanstack/react-query"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { CreateProject, createProject } from "@/lib/client_functions/projects"
 import { toast } from "sonner"
 import { arrayToString } from "@/lib/helpers/arrayToString"
 
 type Props = {
     project?: Projects
+    setVisible: (visible: boolean) => void
 }
 
-export default function projectForm({ project }: Props) {
+export default function projectForm({ project, setVisible }: Props) {
     const form = useForm<CreateProjectValues>({
         resolver: zodResolver(createProjectSchema),
         mode: "onChange", // Validation en temps réel
@@ -30,6 +31,7 @@ export default function projectForm({ project }: Props) {
             constraints: [{ value: "" }],
         },
     })
+    const queryClient = useQueryClient()
     const creationM = useMutation({
         mutationFn: (data: CreateProject) => createProject(data),
     })
@@ -45,7 +47,11 @@ export default function projectForm({ project }: Props) {
             () => creationM.mutateAsync(project),
             {
                 loading: "création en cours...",
-                success: "Projet créé avec succès",
+                success: (data) => {
+                    queryClient.invalidateQueries({ queryKey: ["projects"] })
+                    setVisible(false)
+                    return data.message
+                },
                 error: (error) => error.message,
             }
         )
