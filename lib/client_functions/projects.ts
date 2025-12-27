@@ -15,3 +15,24 @@ export const createProject = async (data: CreateProject) => {
     }
     return await response.json() as Projects
 }
+
+export const getProjects = async () => {
+    const response = await fetch('/api/projects')
+    if (!response.ok) {
+        const error = await response.json() as { error: string }
+        throw new Error(error.error)
+    }
+    return await response.json() as Projects[]
+}
+
+export const deleteProject = async (projectId: string) => {
+    const response = await fetch(`/api/projects/${projectId}`, {
+        method: 'DELETE',
+    })
+    if (!response.ok) {
+        const error = await response.json() as { error: string }
+        throw new Error(error.error)
+    }
+    return await response.json() as { message: string }
+}
+

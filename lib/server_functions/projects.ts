@@ -16,3 +16,29 @@ export const createProject = async (data: CreateProject) => {
         return null
     }
 }
+
+export const getProjects = async () => {
+    try {
+        const { tablesDB } = createAdminClient()
+        return (await tablesDB.listRows({
+            databaseId: process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!,
+            tableId: process.env.NEXT_PUBLIC_APPWRITE_PROJECTS_TABLE_ID!
+        })).rows
+    } catch (error) {
+        return null
+    }
+}
+
+export const deleteProject = async (projectId: string) => {
+    try {
+        const { tablesDB } = createAdminClient()
+        await tablesDB.deleteRow({
+            databaseId: process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!,
+            tableId: process.env.NEXT_PUBLIC_APPWRITE_PROJECTS_TABLE_ID!,
+            rowId: projectId
+        })
+        return true
+    } catch (error) {
+        return null
+    }
+}
