@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import Dialogue from "@/components/Dialogue"
 import DeleteProject from "@/components/DeleteProject"
-
+import { useViewProjectStore } from "@/store/projects"
 export const columns: ColumnDef<Projects>[] = [
     {
         accessorKey: "title",
@@ -25,6 +25,8 @@ export const columns: ColumnDef<Projects>[] = [
         cell: ({ row }) => {
             const project = row.original
             const [open, setOpen] = React.useState(false)
+            const setViewProject = useViewProjectStore((state) => state.setView)
+            const setProject = useViewProjectStore((state) => state.setProject)
             return (
                 <>
                     <Dialogue open={open} onOpenChange={setOpen} title="Supprimer le projet">
@@ -40,7 +42,10 @@ export const columns: ColumnDef<Projects>[] = [
                         <DropdownMenuContent align="end">
                             <DropdownMenuLabel>Actions</DropdownMenuLabel>
                             <DropdownMenuItem
-                                onClick={() => <Dialogue open={true} onOpenChange={() => { }} title="Previsualiser" children={<div>Previsualiser</div>} />}
+                                onClick={() => {
+                                    setViewProject(true)
+                                    setProject(project)
+                                }}
                             >
                                 Previsualiser
                             </DropdownMenuItem>

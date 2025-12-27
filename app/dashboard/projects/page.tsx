@@ -8,6 +8,8 @@ import { columns } from "./columns";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { X } from "lucide-react";
+import { useViewProjectStore } from "@/store/projects";
+import PreviewProject from "@/components/PreviewProject";
 
 export default function page() {
   const { data, isPending, error } = useQuery({
@@ -15,7 +17,7 @@ export default function page() {
     queryFn: getProjects,
   })
   const [visible, setVisible] = useState(false)
-  const [viewProject, setViewProject] = useState(false)
+  const viewProject = useViewProjectStore((state) => state.view)
   return (
     <div>
       <div className="flex justify-between items-center mb-4">
@@ -30,9 +32,7 @@ export default function page() {
       </div> : null}
       {
         viewProject ?
-          <div>
-            view project
-          </div> : null
+          <PreviewProject /> : null
       }
     </div>
   )
