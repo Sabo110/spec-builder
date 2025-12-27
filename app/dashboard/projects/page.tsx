@@ -1,7 +1,10 @@
-import React from 'react'
+import ProjectForm from "@/components/projectForm";
+
 
 export default function page() {
   return (
-    <div>page projects</div>
+    <div>
+      <ProjectForm />
+    </div>
   )
 }
