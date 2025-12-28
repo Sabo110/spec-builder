@@ -13,3 +13,17 @@ export const useViewProjectStore = create<ViewProjectStore>((set) => ({
     project: null,
     setProject: (project: Projects | null) => set({ project })
 }))
+
+
+type ProjectFormStore = {
+    viewCreationProjectForm: boolean
+    setViewCreationProjectForm: (viewCreationProjectForm: boolean) => void
+    viewUpdateProjectForm: boolean
+    setViewUpdateProjectForm: (viewUpdateProjectForm: boolean) => void
+}
+export const useProjectFormStore = create<ProjectFormStore>((set) => ({
+    viewCreationProjectForm: false,
+    setViewCreationProjectForm: (viewCreationProjectForm: boolean) => set({ viewCreationProjectForm }),
+    viewUpdateProjectForm: false,
+    setViewUpdateProjectForm: (viewUpdateProjectForm: boolean) => set({ viewUpdateProjectForm })
+}))

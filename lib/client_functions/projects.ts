@@ -99,130 +99,68 @@ export async function exportProjectToWord(project: Projects) {
 export function exportProjectToPdf(project: Projects) {
     const doc = new jsPDF()
     let y = 20
-    const pageHeight = doc.internal.pageSize.height
-    const pageWidth = doc.internal.pageSize.width
-    const margin = 15
 
-    // Couleurs (RGB)
-    const primaryColor = { r: 0, g: 0, b: 0 } // Noir pour le texte principal
-    const accentColor = { r: 59, g: 130, b: 246 } // Bleu pour les accents
-    const lightGray = { r: 80, g: 80, b: 80 } // Gris foncé pour le texte
-
-    const checkPageBreak = (space = 10) => {
-        if (y + space > pageHeight - 15) {
-            doc.addPage()
-            y = 20
-        }
-    }
-
-    // ============================================
-    // TITRE PRINCIPAL CENTRÉ
-    // ============================================
-    const addMainTitle = () => {
-        doc.setFont('helvetica', 'bold')
-        doc.setFontSize(22)
-        doc.setTextColor(primaryColor.r, primaryColor.g, primaryColor.b)
-        doc.text('CAHIER DES CHARGES', pageWidth / 2, y, { align: 'center' })
+    // ===== helpers =====
+    const addMainTitle = (text: string) => {
+        doc.setFontSize(18)
+        doc.setFont("helvetica", "bold")
+        doc.text(text.toUpperCase(), 105, y, { align: "center" })
         y += 15
     }
 
-    // ============================================
-    // SECTION NUMÉROTÉE (1. Projet, 2. Description, etc.)
-    // ============================================
-    const addNumberedSection = (number: number, title: string, content: string) => {
-        checkPageBreak(15)
-
-        // Titre de la section avec numéro
-        doc.setFont('helvetica', 'bold')
-        doc.setFontSize(13)
-        doc.setTextColor(primaryColor.r, primaryColor.g, primaryColor.b)
-        doc.text(`${number}. ${title}:`, margin, y)
-        y += 8
-
-        // Contenu de la section
-        doc.setFont('helvetica', 'normal')
-        doc.setFontSize(11)
-        doc.setTextColor(lightGray.r, lightGray.g, lightGray.b)
-
-        const lines = doc.splitTextToSize(content, pageWidth - 2 * margin)
-        lines.forEach((line: string) => {
-            checkPageBreak(6)
-            doc.text(line, margin, y)
-            y += 6
-        })
+    const addSectionTitle = (number: number, text: string) => {
+        doc.setFontSize(14)
+        doc.setFont("helvetica", "bold")
+        doc.text(`${number}. ${text}`, 10, y)
         y += 8
     }
 
-    // ============================================
-    // SECTION AVEC LISTE NUMÉROTÉE (4.1, 4.2, etc.)
-    // ============================================
-    const addNumberedListSection = (number: number, title: string, items: string[]) => {
-        checkPageBreak(15)
-
-        // Titre de la section avec numéro
-        doc.setFont('helvetica', 'bold')
-        doc.setFontSize(13)
-        doc.setTextColor(primaryColor.r, primaryColor.g, primaryColor.b)
-        doc.text(`${number}. ${title}:`, margin, y)
-        y += 8
-
-        // Liste des items
-        doc.setFont('helvetica', 'normal')
+    const addParagraph = (text: string) => {
         doc.setFontSize(11)
+        doc.setFont("helvetica", "normal")
+        const lines = doc.splitTextToSize(text, 180)
+        doc.text(lines, 10, y)
+        y += lines.length * 6 + 4
+    }
 
+    const addNumberedList = (sectionNumber: number, items: string[]) => {
+        doc.setFontSize(11)
         items.forEach((item, index) => {
-            checkPageBreak(10)
-
-            // Numéro de l'item (ex: 4.1, 4.2)
-            const itemNumber = `${number}.${index + 1}`
-            doc.setFont('helvetica', 'bold')
-            doc.setTextColor(accentColor.r, accentColor.g, accentColor.b)
-            doc.text(itemNumber, margin + 5, y)
-
-            // Contenu de l'item
-            doc.setFont('helvetica', 'normal')
-            doc.setTextColor(lightGray.r, lightGray.g, lightGray.b)
-            const lines = doc.splitTextToSize(item, pageWidth - 2 * margin - 20)
-
-            lines.forEach((line: string, i: number) => {
-                if (i > 0) {
-                    checkPageBreak(6)
-                    y += 6
-                }
-                doc.text(line, margin + 20, y)
-            })
-
-            y += 7
+            const label = `${sectionNumber}.${index + 1} `
+            const lines = doc.splitTextToSize(label + item, 175)
+            doc.text(lines, 15, y)
+            y += lines.length * 6
         })
-
-        y += 5
+        y += 4
     }
 
-    /* ======================
-        CONTENU DU DOCUMENT
-       ====================== */
+    const addSignature = (text: string) => {
+        y += 15
+        doc.setFontSize(10)
+        doc.setFont("helvetica", "italic")
+        doc.text(text, 190, y, { align: "right" })
+    }
+    // ===== content =====
+    addMainTitle("Cahier des charges")
+    addMainTitle(project.title)
 
-    // Titre principal centré
-    addMainTitle()
+    addSectionTitle(1, "Description")
+    addParagraph(project.description)
 
-    // 1. Projet
-    addNumberedSection(1, "Projet", project.title)
+    addSectionTitle(2, "Problématique")
+    addParagraph(project.problematic)
 
-    // 2. Description du projet
-    addNumberedSection(2, "Description du projet", project.description)
+    addSectionTitle(3, "Objectifs")
+    addNumberedList(3, stringToArray(project.objectives).map(o => o.value))
 
-    // 3. Problématique ou contexte
-    addNumberedSection(3, "Problématique ou contexte", project.problematic)
+    addSectionTitle(4, "Fonctionnalités")
+    addNumberedList(4, stringToArray(project.features).map(f => f.value))
 
-    // 4. Objectifs du projet
-    addNumberedListSection(4, "Objectifs du projet", stringToArray(project.objectives).map(o => o.value))
+    addSectionTitle(5, "Contraintes")
+    addNumberedList(5, stringToArray(project.constraints).map(c => c.value))
 
-    // 5. Fonctionnalités
-    addNumberedListSection(5, "Fonctionnalités", stringToArray(project.features).map(f => f.value))
-
-    // 6. Contraintes
-    addNumberedListSection(6, "Contraintes", stringToArray(project.constraints).map(c => c.value))
-
-    doc.save(`${project.title}.pdf`)
+    addSignature("Fait pour une Demoiselle")
+    // ===== save =====
+    doc.save(`Cahier_des_charges_${project.title}.pdf`)
 }
 
