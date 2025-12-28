@@ -1,18 +1,18 @@
 "use client"
 import { exportProjectToWord, exportProjectToPdf } from '@/lib/client_functions/projects'
 import { stringToArray } from '@/lib/helpers/arrayToString'
-import { useViewProjectStore } from '@/store/projects'
+import { useProjectPreviewStore } from '@/store/projects'
 import { Button } from './ui/button'
 import { FileText, Download } from 'lucide-react'
 import { Section } from './Section'
 import { NumberedList } from './NumberedList'
 
 export default function PreviewProject() {
-  const project = useViewProjectStore((state) => state.project)!
+  const projectPreview = useProjectPreviewStore((state) => state.projectPreview)!
 
-  const objectives = stringToArray(project.objectives).map(o => o.value)
-  const features = stringToArray(project.features).map(f => f.value)
-  const constraints = stringToArray(project.constraints).map(c => c.value)
+  const objectives = stringToArray(projectPreview.objectives).map(o => o.value)
+  const features = stringToArray(projectPreview.features).map(f => f.value)
+  const constraints = stringToArray(projectPreview.constraints).map(c => c.value)
 
   return (
     <article className="max-w-3xl mx-auto p-8 space-y-8 border rounded-lg bg-white">
@@ -23,16 +23,16 @@ export default function PreviewProject() {
           Cahier des charges
         </p>
         <h1 className="text-2xl font-bold uppercase">
-          {project.title}
+          {projectPreview.title}
         </h1>
       </div>
 
       <Section number={1} title="Description du projet">
-        <p className="whitespace-pre-line">{project.description}</p>
+        <p className="whitespace-pre-line">{projectPreview.description}</p>
       </Section>
 
       <Section number={2} title="Problématique">
-        <p className="whitespace-pre-line">{project.problematic}</p>
+        <p className="whitespace-pre-line">{projectPreview.problematic}</p>
       </Section>
 
       <Section number={3} title="Objectifs">
@@ -46,7 +46,7 @@ export default function PreviewProject() {
       <Section number={5} title="Contraintes">
         <NumberedList sectionNumber={5} items={constraints} />
       </Section>
-      <Button onClick={() => exportProjectToPdf(project)}>
+      <Button onClick={() => exportProjectToPdf(projectPreview)}>
         <FileText className="mr-2 h-4 w-4" />
         Exporter en PDF
       </Button>

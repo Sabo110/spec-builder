@@ -40,6 +40,21 @@ export const deleteProject = async (projectId: string) => {
     return await response.json() as { message: string }
 }
 
+export const updateProject = async (projectId: string, data: Projects) => {
+    const response = await fetch(`/api/projects/${projectId}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+    })
+    if (!response.ok) {
+        const error = await response.json() as { error: string }
+        throw new Error(error.error)
+    }
+    return await response.json() as { message: string }
+}
+
 export async function exportProjectToWord(project: Projects) {
     const doc = new Document({
         sections: [
@@ -93,8 +108,6 @@ export async function exportProjectToWord(project: Projects) {
     const blob = await Packer.toBlob(doc)
     saveAs(blob, `${project.title}.docx`)
 }
-
-
 
 export function exportProjectToPdf(project: Projects) {
     const doc = new jsPDF()
@@ -159,7 +172,7 @@ export function exportProjectToPdf(project: Projects) {
     addSectionTitle(5, "Contraintes")
     addNumberedList(5, stringToArray(project.constraints).map(c => c.value))
 
-    addSignature("Fait pour une Demoiselle")
+    addSignature("Fait pour toi Baby")
     // ===== save =====
     doc.save(`Cahier_des_charges_${project.title}.pdf`)
 }

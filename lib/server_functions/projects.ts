@@ -42,3 +42,18 @@ export const deleteProject = async (projectId: string) => {
         return null
     }
 }
+
+export const updateProject = async (projectId: string, data: Partial<Projects>) => {
+    try {
+        const { tablesDB } = createAdminClient()
+        await tablesDB.updateRow({
+            databaseId: process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!,
+            tableId: process.env.NEXT_PUBLIC_APPWRITE_PROJECTS_TABLE_ID!,
+            rowId: projectId,
+            data: data
+        })
+        return true
+    } catch (error) {
+        return null
+    }
+}

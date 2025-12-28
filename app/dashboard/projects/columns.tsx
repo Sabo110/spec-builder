@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import Dialogue from "@/components/Dialogue"
 import DeleteProject from "@/components/DeleteProject"
-import { useViewProjectStore } from "@/store/projects"
+import { useProjectPreviewStore, useProjectFormStore, useProjectStore } from "@/store/projects"
 export const columns: ColumnDef<Projects>[] = [
     {
         accessorKey: "title",
@@ -25,8 +25,9 @@ export const columns: ColumnDef<Projects>[] = [
         cell: ({ row }) => {
             const project = row.original
             const [open, setOpen] = React.useState(false)
-            const setViewProject = useViewProjectStore((state) => state.setView)
-            const setProject = useViewProjectStore((state) => state.setProject)
+            const setProjectPreview = useProjectPreviewStore((state) => state.setProjectPreview)
+            const setViewUpdateProjectForm = useProjectFormStore((state) => state.setViewUpdateProjectForm)
+            const setProject = useProjectStore((state) => state.setProject) 
             return (
                 <>
                     <Dialogue open={open} onOpenChange={setOpen} title="Supprimer le projet">
@@ -43,14 +44,20 @@ export const columns: ColumnDef<Projects>[] = [
                             <DropdownMenuLabel>Actions</DropdownMenuLabel>
                             <DropdownMenuItem
                                 onClick={() => {
-                                    setViewProject(true)
-                                    setProject(project)
+                                    setProjectPreview(project)
                                 }}
                             >
                                 Previsualiser
                             </DropdownMenuItem>
                             <DropdownMenuSeparator />
-                            <DropdownMenuItem>Mettre a jour</DropdownMenuItem>
+                            {/* <DropdownMenuItem
+                                onClick={() => {
+                                    setViewUpdateProjectForm(true)
+                                    setProject(project)
+                                }}
+                            >
+                                Mettre a jour
+                            </DropdownMenuItem> */}
                             <DropdownMenuItem onClick={() => setOpen(true)}>Supprimer</DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>

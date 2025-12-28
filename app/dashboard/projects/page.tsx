@@ -8,19 +8,21 @@ import { columns } from "./columns";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { X } from "lucide-react";
-import { useViewProjectStore } from "@/store/projects";
+import { useProjectPreviewStore } from "@/store/projects";
 import PreviewProject from "@/components/PreviewProject";
 import { useProjectFormStore } from "@/store/projects";
 
 export default function page() {
   const viewCreationProjectForm = useProjectFormStore((state) => state.viewCreationProjectForm)
+  const viewUpdateProjectForm = useProjectFormStore((state) => state.viewUpdateProjectForm)
   const setViewCreationProjectForm = useProjectFormStore((state) => state.setViewCreationProjectForm)
+  const setViewUpdateProjectForm = useProjectFormStore((state) => state.setViewUpdateProjectForm)
   const { data, isPending, error } = useQuery({
     queryKey: ["projects"],
     queryFn: getProjects,
   })
-  const setViewProject = useViewProjectStore((state) => state.setView)
-  const viewProject = useViewProjectStore((state) => state.view)
+  const projectPreview = useProjectPreviewStore((state) => state.projectPreview)
+  const setProjectPreview = useProjectPreviewStore((state) => state.setProjectPreview)
   return (
     <div>
       <div className="flex justify-between items-center mb-4">
@@ -28,22 +30,24 @@ export default function page() {
         <h1>
           {
             viewCreationProjectForm ? "Interface de creation de projet" :
-              viewProject ? "Preview du projet" :
+              projectPreview ? "Preview du projet" :
                 "Projets"
           }
         </h1>
         {
           viewCreationProjectForm ? <Button onClick={() => setViewCreationProjectForm(false)} className="cursor-pointer">Retour</Button> :
-            viewProject ? <Button onClick={() => setViewProject(false)} className="cursor-pointer">Retour</Button> :
-              <Button onClick={() => setViewCreationProjectForm(true)} className="cursor-pointer">Créer un projet</Button>
+            projectPreview ? <Button onClick={() => setProjectPreview(null)} className="cursor-pointer">Retour</Button> :
+              viewUpdateProjectForm ? <Button onClick={() => setViewUpdateProjectForm(false)} className="cursor-pointer">Retour</Button> :
+                <Button onClick={() => setViewCreationProjectForm(true)} className="cursor-pointer">Créer un projet</Button>
         }
       </div>
       {/* contenu principal */}
       <div>
         {
           viewCreationProjectForm ? <ProjectForm setVisible={setViewCreationProjectForm} /> :
-            viewProject ? <PreviewProject /> :
-              <DataTable columns={columns} data={data ?? []} />
+            viewUpdateProjectForm ? <ProjectForm setVisible={setViewUpdateProjectForm} /> :
+              projectPreview ? <PreviewProject /> :
+                <DataTable columns={columns} data={data ?? []} />
         }
       </div>
     </div>
