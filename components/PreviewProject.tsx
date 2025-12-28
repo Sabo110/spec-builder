@@ -1,64 +1,54 @@
 "use client"
-import { exportProjectToWord } from '@/lib/client_functions/projects'
+import { exportProjectToWord, exportProjectToPdf } from '@/lib/client_functions/projects'
 import { stringToArray } from '@/lib/helpers/arrayToString'
 import { useViewProjectStore } from '@/store/projects'
 import { Button } from './ui/button'
+import NumberedListSection from './NumberedListSection'
+import { FileText, Download } from 'lucide-react'
+import { Section } from './Section'
+import { NumberedList } from './NumberedList'
 
 export default function PreviewProject() {
     const project = useViewProjectStore((state) => state.project)!
+
+    const objectives = stringToArray(project.objectives).map(o => o.value)
+    const features = stringToArray(project.features).map(f => f.value)
+    const constraints = stringToArray(project.constraints).map(c => c.value)
+
     return (
-        <>
-            <div className="space-y-6 rounded-lg border p-6 bg-background">
-                {/* Titre */}
-                <h1 className="text-2xl font-bold">{project?.title}</h1>
+        <article className="max-w-3xl mx-auto p-8 space-y-8 border rounded-lg bg-white">
 
-                {/* Description */}
-                <section>
-                    <h2 className="text-lg font-semibold">Description</h2>
-                    <p className="text-muted-foreground whitespace-pre-line">
-                        {project.description}
-                    </p>
-                </section>
+  {/* En-tête */}
+  <div className="text-center space-y-2">
+    <p className="text-sm uppercase text-muted-foreground">
+      Cahier des charges
+    </p>
+    <h1 className="text-2xl font-bold uppercase">
+      {project.title}
+    </h1>
+  </div>
 
-                {/* Problématique */}
-                <section>
-                    <h2 className="text-lg font-semibold">Problématique</h2>
-                    <p className="text-muted-foreground whitespace-pre-line">
-                        {project.problematic}
-                    </p>
-                </section>
+  <Section number={1} title="Description du projet">
+    <p className="whitespace-pre-line">{project.description}</p>
+  </Section>
 
-                {/* Objectifs */}
-                <section>
-                    <h2 className="text-lg font-semibold">Objectifs</h2>
-                    <ul className="list-disc pl-6 space-y-1">
-                        {stringToArray(project.objectives).map((o, i) => (
-                            <li key={i}>{o.value}</li>
-                        ))}
-                    </ul>
-                </section>
+  <Section number={2} title="Problématique">
+    <p className="whitespace-pre-line">{project.problematic}</p>
+  </Section>
 
-                {/* Fonctionnalités */}
-                <section>
-                    <h2 className="text-lg font-semibold">Fonctionnalités</h2>
-                    <ul className="list-disc pl-6 space-y-1">
-                        {stringToArray(project.features).map((f, i) => (
-                            <li key={i}>{f.value}</li>
-                        ))}
-                    </ul>
-                </section>
+  <Section number={3} title="Objectifs">
+    <NumberedList sectionNumber={3} items={objectives} />
+  </Section>
 
-                {/* Contraintes */}
-                <section>
-                    <h2 className="text-lg font-semibold">Contraintes</h2>
-                    <ul className="list-disc pl-6 space-y-1">
-                        {stringToArray(project.constraints).map((c, i) => (
-                            <li key={i}>{c.value}</li>
-                        ))}
-                    </ul>
-                </section>
-            </div>
-            <Button onClick={() => exportProjectToWord(project)} className="mt-4">Exporter en Word</Button>
-        </>
+  <Section number={4} title="Fonctionnalités">
+    <NumberedList sectionNumber={4} items={features} />
+  </Section>
+
+  <Section number={5} title="Contraintes">
+    <NumberedList sectionNumber={5} items={constraints} />
+  </Section>
+
+</article>
+
     )
 }
