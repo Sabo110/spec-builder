@@ -15,10 +15,11 @@ export default function layout({ children }: { children: React.ReactNode }) {
                     "--header-height": "calc(var(--spacing) * 12)",
                 } as React.CSSProperties
             }
+            
         >
             <AppSidebar variant="inset" />
             <SidebarInset>
-                {/* <SiteHeader /> */}
+                <SiteHeader />
                 <div className="p-4">
                     {children}
                 </div>

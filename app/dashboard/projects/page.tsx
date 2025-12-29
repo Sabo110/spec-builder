@@ -24,32 +24,34 @@ export default function page() {
   const projectPreview = useProjectPreviewStore((state) => state.projectPreview)
   const setProjectPreview = useProjectPreviewStore((state) => state.setProjectPreview)
   return (
-    <div>
-      <div className="flex justify-between items-center mb-4">
-        {/* entete */}
-        <h1>
-          {
-            viewCreationProjectForm ? "Interface de creation de projet" :
-              projectPreview ? "Preview du projet" :
-                "Projets"
-          }
-        </h1>
-        {
-          viewCreationProjectForm ? <Button onClick={() => setViewCreationProjectForm(false)} className="cursor-pointer">Retour</Button> :
-            projectPreview ? <Button onClick={() => setProjectPreview(null)} className="cursor-pointer">Retour</Button> :
-              viewUpdateProjectForm ? <Button onClick={() => setViewUpdateProjectForm(false)} className="cursor-pointer">Retour</Button> :
-                <Button onClick={() => setViewCreationProjectForm(true)} className="cursor-pointer">Créer un projet</Button>
-        }
-      </div>
-      {/* contenu principal */}
+    
       <div>
-        {
-          viewCreationProjectForm ? <ProjectForm setVisible={setViewCreationProjectForm} /> :
-            viewUpdateProjectForm ? <ProjectForm setVisible={setViewUpdateProjectForm} /> :
-              projectPreview ? <PreviewProject /> :
-                <DataTable columns={columns} data={data ?? []} />
-        }
+        <div className="flex justify-between items-center mb-4">
+          {/* entete */}
+          <h1>
+            {
+              viewCreationProjectForm ? "Interface de creation de projet" :
+                projectPreview ? "Preview du projet" :
+                  "Projets"
+            }
+          </h1>
+          {
+            viewCreationProjectForm ? <Button onClick={() => setViewCreationProjectForm(false)} className="cursor-pointer">Retour</Button> :
+              projectPreview ? <Button onClick={() => setProjectPreview(null)} className="cursor-pointer">Retour</Button> :
+                viewUpdateProjectForm ? <Button onClick={() => setViewUpdateProjectForm(false)} className="cursor-pointer">Retour</Button> :
+                  <Button onClick={() => setViewCreationProjectForm(true)} className="cursor-pointer">Créer un projet</Button>
+          }
+        </div>
+        {/* contenu principal */}
+        <div>
+          {
+            viewCreationProjectForm ? <ProjectForm setVisible={setViewCreationProjectForm} /> :
+              viewUpdateProjectForm ? <ProjectForm setVisible={setViewUpdateProjectForm} /> :
+                projectPreview ? <PreviewProject /> :
+                  <DataTable columns={columns} data={data ?? []} />
+          }
+        </div>
       </div>
-    </div>
+    
   )
 }
