@@ -1,6 +1,7 @@
 import { currentUser } from "@clerk/nextjs/server";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowRight, FileText, ListTodo, Download } from "lucide-react";
 
 export default async function Home() {
@@ -9,6 +10,17 @@ export default async function Home() {
   return (
     <main className="min-h-screen flex flex-col items-center justify-center p-6 bg-background">
       <div className="max-w-3xl text-center space-y-10 animate-in fade-in slide-in-from-bottom-5 duration-700">
+
+        {/* Logo */}
+        <div className="flex justify-center mb-6">
+          <Image
+            src="/icon.svg"
+            alt="SpecBuilder Logo"
+            width={80}
+            height={80}
+            className="rounded-2xl shadow-xl shadow-primary/20"
+          />
+        </div>
 
         {/* Titre et sous-titre */}
         <div className="space-y-6">
