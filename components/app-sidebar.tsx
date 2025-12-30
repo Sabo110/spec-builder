@@ -34,6 +34,7 @@ import {
 } from "@/components/ui/sidebar"
 import { useSidebar } from "@/components/ui/sidebar"
 import { useRouter } from "next/navigation"
+import Image from "next/image"
 
 const data = {
   user: {
@@ -76,8 +77,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               asChild
               className="data-[slot=sidebar-menu-button]:!p-1.5"
             >
-              <span onClick={() => handleNavigate("/dashboard")} className="cursor-pointer">
-                <IconInnerShadowTop className="!size-5" />
+              <span onClick={() => handleNavigate("/dashboard")} className="cursor-pointer flex items-center gap-2">
+                <Image src="/icon.svg" alt="Logo" width={24} height={24} className="rounded-sm" />
                 <span className="text-base font-semibold">Spec Builder</span>
               </span>
             </SidebarMenuButton>
