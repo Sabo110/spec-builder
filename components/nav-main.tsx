@@ -10,7 +10,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
-import { useRouter } from "next/navigation"
+import { useRouter } from 'nextjs-toploader/app';
 import { useSidebar } from "@/components/ui/sidebar"
 export function NavMain({
   items,
