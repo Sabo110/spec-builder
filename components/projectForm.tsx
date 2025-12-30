@@ -2,7 +2,7 @@
 
 import { createProjectSchema, CreateProjectValues } from "@/schemas/project"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm, useWatch } from "react-hook-form"
+import { useForm } from "react-hook-form"
 import { Form } from "./ui/form"
 import { FormTextarea } from "./forms/FormTextarea"
 import { Button } from "./ui/button"
@@ -12,10 +12,8 @@ import { CreateProject, createProject } from "@/lib/client_functions/projects"
 import { toast } from "sonner"
 import { stringToArray, arrayToString } from "@/lib/helpers/arrayToString"
 import { useProjectStore } from "@/store/projects"
-import { useState } from "react"
 import { UpdateProject, updateProject } from "@/lib/client_functions/projects"
 import { getChangedProperties } from "@/lib/helpers/compare"
-import { Projects } from "@/types/appwrite"
 
 type Props = {
     setVisible: (visible: boolean) => void
@@ -150,8 +148,8 @@ export default function projectForm({ setVisible }: Props) {
                 <FieldArray
                     control={form.control}
                     name="features"
-                    label="Caractéristiques"
-                    placeholder="Ajoute une caractéristique"
+                    label="Fonctionnalités"
+                    placeholder="Ajoute une fonctionnalité"
                 />
                 <FieldArray
                     control={form.control}
