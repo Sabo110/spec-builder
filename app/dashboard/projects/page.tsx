@@ -10,8 +10,10 @@ import { useProjectPreviewStore } from "@/store/projects";
 import PreviewProject from "@/components/PreviewProject";
 import { useProjectFormStore } from "@/store/projects";
 import BackBtn from "@/components/BackBtn";
+import { useProjectStore } from "@/store/projects";
 
 export default function page() {
+  const setProject = useProjectStore((state) => state.setProject)
   const viewCreationProjectForm = useProjectFormStore((state) => state.viewCreationProjectForm)
   const viewUpdateProjectForm = useProjectFormStore((state) => state.viewUpdateProjectForm)
   const setViewCreationProjectForm = useProjectFormStore((state) => state.setViewCreationProjectForm)
@@ -28,15 +30,15 @@ export default function page() {
       <div className="flex justify-between items-center mb-4">
         {/* entete */}
         {
-          viewCreationProjectForm ? <h1 className="text-2xl font-bold">Interface de creation de projet</h1> :
-            projectPreview ? <h1 className="text-2xl font-bold">Preview du projet</h1> :
-              viewUpdateProjectForm ? <h1 className="text-2xl font-bold">Interface de modification de projet</h1> :
-                <h1 className="text-2xl font-bold">Projets</h1>
+          viewCreationProjectForm ? <h1 className="md:text-2xl text-xl font-bold">Création de projet</h1> :
+            projectPreview ? <h1 className="md:text-2xl text-xl font-bold">Preview du projet</h1> :
+              viewUpdateProjectForm ? <h1 className="md:text-2xl text-xl font-bold">Mise à jour du projet</h1> :
+                <h1 className="md:text-2xl text-xl font-bold">Projets</h1>
         }
         {
           viewCreationProjectForm ? <BackBtn onClick={() => setViewCreationProjectForm(false)} /> :
             projectPreview ? <BackBtn onClick={() => setProjectPreview(null)} /> :
-              viewUpdateProjectForm ? <BackBtn onClick={() => setViewUpdateProjectForm(false)} /> :
+              viewUpdateProjectForm ? <BackBtn onClick={() => { setViewUpdateProjectForm(false); setProject(null) }} /> :
                 <Button onClick={() => setViewCreationProjectForm(true)} className="cursor-pointer" size="lg">Créer un projet</Button>
         }
       </div>

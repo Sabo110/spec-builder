@@ -21,6 +21,7 @@ type Props = {
 
 export default function projectForm({ setVisible }: Props) {
     const project = useProjectStore((state) => state.project)
+    const setProject = useProjectStore((state) => state.setProject)
     const form = useForm<CreateProjectValues>({
         resolver: zodResolver(createProjectSchema),
         mode: "onChange", // Validation en temps réel
@@ -99,6 +100,7 @@ export default function projectForm({ setVisible }: Props) {
                     success: (data) => {
                         queryClient.invalidateQueries({ queryKey: ["projects"] })
                         setVisible(false)
+                        setProject(null)
                         return data.message
                     },
                     error: (error) => error.message,

@@ -6,6 +6,6 @@ type Props = {
 }
 export default function BackBtn({ onClick }: Props) {
     return (
-        <Button onClick={onClick} className="cursor-pointer" size={"lg"}><ArrowLeft />Retour</Button>
+        <Button onClick={onClick} className="cursor-pointer md:text-lg text-base"><ArrowLeft />Retour</Button>
     )
 }

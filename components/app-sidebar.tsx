@@ -32,6 +32,8 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
+import { useSidebar } from "@/components/ui/sidebar"
+import { useRouter } from "next/navigation"
 
 const data = {
   user: {
@@ -55,6 +57,16 @@ const data = {
 }
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const { setOpenMobile, isMobile } = useSidebar()
+  const router = useRouter()
+  const handleNavigate = (url: string) => {
+    if (isMobile) {
+      setOpenMobile(false)
+      router.push(url)
+    } else {
+      router.push(url)
+    }
+  }
   return (
     <Sidebar collapsible="offcanvas" {...props}>
       <SidebarHeader>
@@ -64,10 +76,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               asChild
               className="data-[slot=sidebar-menu-button]:!p-1.5"
             >
-              <a href="#">
+              <span onClick={() => handleNavigate("/dashboard")} className="cursor-pointer">
                 <IconInnerShadowTop className="!size-5" />
                 <span className="text-base font-semibold">Spec Builder</span>
-              </a>
+              </span>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
