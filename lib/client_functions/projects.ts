@@ -149,14 +149,22 @@ export function exportProjectToPdf(project: Projects) {
     }
 
     const addSignature = (text: string) => {
-        y += 15
+        const pageHeight = doc.internal.pageSize.height
+        const bottomY = pageHeight - 20
+
+        // Si le contenu actuel dépasse le point où la signature devrait être,
+        // on ajoute une nouvelle page
+        if (y > bottomY) {
+            doc.addPage()
+        }
+
         doc.setFontSize(10)
         doc.setFont("helvetica", "italic")
-        doc.text(text, 190, y, { align: "right" })
+        doc.text(text, 190, bottomY, { align: "right" })
     }
     // ===== content =====
     addMainTitle("Cahier des charges")
-    addMainTitle(project.title)
+    addMainTitle(`Projet : ${project.title}`)
 
     addSectionTitle(1, "Description")
     addParagraph(project.description)

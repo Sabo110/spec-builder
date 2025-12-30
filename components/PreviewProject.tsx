@@ -23,7 +23,7 @@ export default function PreviewProject() {
           Cahier des charges
         </p>
         <h1 className="text-2xl font-bold uppercase">
-          {projectPreview.title}
+          Projet : {projectPreview.title}
         </h1>
       </div>
 
