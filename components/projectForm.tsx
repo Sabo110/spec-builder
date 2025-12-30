@@ -12,14 +12,16 @@ import { CreateProject, createProject } from "@/lib/client_functions/projects"
 import { toast } from "sonner"
 import { stringToArray, arrayToString } from "@/lib/helpers/arrayToString"
 import { useProjectStore } from "@/store/projects"
-import { useEffect, useState } from "react"
+import { useState } from "react"
+import { UpdateProject, updateProject } from "@/lib/client_functions/projects"
+import { getChangedProperties } from "@/lib/helpers/compare"
+import { Projects } from "@/types/appwrite"
 
 type Props = {
     setVisible: (visible: boolean) => void
 }
 
 export default function projectForm({ setVisible }: Props) {
-    const [disableUpdateBtn, setDisableUpdateBtn] = useState(false)
     const project = useProjectStore((state) => state.project)
     const form = useForm<CreateProjectValues>({
         resolver: zodResolver(createProjectSchema),
@@ -41,34 +43,72 @@ export default function projectForm({ setVisible }: Props) {
                 constraints: [{ value: "" }],
             },
     })
-    const values = useWatch({
-        control: form.control,
-    })
-    
     const queryClient = useQueryClient()
     const creationM = useMutation({
         mutationFn: (data: CreateProject) => createProject(data),
     })
+    const updateM = useMutation({
+        mutationFn: (data: UpdateProject) => updateProject(project?.$id!, data),
+    })
     function onSubmit(data: CreateProjectValues) {
-        const project = {
-            ...data,
-            objectives: arrayToString(data.objectives),
-            features: arrayToString(data.features),
-            constraints: arrayToString(data.constraints),
-        }
-        console.log(project)
-        toast.promise(
-            () => creationM.mutateAsync(project),
-            {
-                loading: "création en cours...",
-                success: (data) => {
-                    queryClient.invalidateQueries({ queryKey: ["projects"] })
-                    setVisible(false)
-                    return data.message
-                },
-                error: (error) => error.message,
+        if (!project) {
+            const project = {
+                ...data,
+                objectives: arrayToString(data.objectives),
+                features: arrayToString(data.features),
+                constraints: arrayToString(data.constraints),
             }
-        )
+            console.log(project)
+            toast.promise(
+                () => creationM.mutateAsync(project),
+                {
+                    loading: "création en cours...",
+                    success: (data) => {
+                        queryClient.invalidateQueries({ queryKey: ["projects"] })
+                        setVisible(false)
+                        return data.message
+                    },
+                    error: (error) => error.message,
+                }
+            )
+        } else {
+            const projectFromForm = {
+                ...data,
+                objectives: arrayToString(data.objectives),
+                features: arrayToString(data.features),
+                constraints: arrayToString(data.constraints),
+            }
+            const keysToCompare: (keyof typeof projectFromForm)[] = [
+                "title",
+                "description",
+                "problematic",
+                "objectives",
+                "features",
+                "constraints"
+            ]
+
+            const changes = getChangedProperties(project, projectFromForm, keysToCompare)
+
+            if (Object.keys(changes).length === 0) {
+                toast.info("Aucune modification détectée")
+                return
+            }
+
+            toast.promise(
+                () => updateM.mutateAsync(changes),
+                {
+                    loading: "mise à jour en cours...",
+                    success: (data) => {
+                        queryClient.invalidateQueries({ queryKey: ["projects"] })
+                        setVisible(false)
+                        return data.message
+                    },
+                    error: (error) => error.message,
+                }
+            )
+
+        }
+
     }
 
     return (
@@ -121,8 +161,13 @@ export default function projectForm({ setVisible }: Props) {
                 />
                 {
                     !project ?
-                        <Button type="submit" disabled={creationM.isPending}>Créer</Button> :
-                        <Button type="button" disabled={disableUpdateBtn}>Mettre à jour</Button>
+                        <div className="flex justify-end mt-10">
+                            <Button type="submit" disabled={creationM.isPending} className="cursor-pointer" size={"lg"}>Créer</Button>
+                        </div>
+                        :
+                        <div className="flex justify-end mt-10">
+                            <Button type="submit" disabled={updateM.isPending} className="cursor-pointer" size={"lg"}>Mettre à jour</Button>
+                        </div>
                 }
             </form>
         </Form>

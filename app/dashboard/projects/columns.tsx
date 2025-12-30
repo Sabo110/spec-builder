@@ -50,14 +50,14 @@ export const columns: ColumnDef<Projects>[] = [
                                 Previsualiser
                             </DropdownMenuItem>
                             <DropdownMenuSeparator />
-                            {/* <DropdownMenuItem
+                            <DropdownMenuItem
                                 onClick={() => {
                                     setViewUpdateProjectForm(true)
                                     setProject(project)
                                 }}
                             >
                                 Mettre a jour
-                            </DropdownMenuItem> */}
+                            </DropdownMenuItem>
                             <DropdownMenuItem onClick={() => setOpen(true)}>Supprimer</DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>

@@ -36,10 +36,10 @@ export default function page() {
             }
           </h1>
           {
-            viewCreationProjectForm ? <Button onClick={() => setViewCreationProjectForm(false)} className="cursor-pointer">Retour</Button> :
-              projectPreview ? <Button onClick={() => setProjectPreview(null)} className="cursor-pointer">Retour</Button> :
-                viewUpdateProjectForm ? <Button onClick={() => setViewUpdateProjectForm(false)} className="cursor-pointer">Retour</Button> :
-                  <Button onClick={() => setViewCreationProjectForm(true)} className="cursor-pointer">Créer un projet</Button>
+            viewCreationProjectForm ? <Button onClick={() => setViewCreationProjectForm(false)} className="cursor-pointer" size="lg">Retour</Button> :
+              projectPreview ? <Button onClick={() => setProjectPreview(null)} className="cursor-pointer" size="lg">Retour</Button> :
+                viewUpdateProjectForm ? <Button onClick={() => setViewUpdateProjectForm(false)} className="cursor-pointer" size="lg">Retour</Button> :
+                  <Button onClick={() => setViewCreationProjectForm(true)} className="cursor-pointer" size="lg">Créer un projet</Button>
           }
         </div>
         {/* contenu principal */}

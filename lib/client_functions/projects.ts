@@ -5,6 +5,7 @@ import { stringToArray } from "@/lib/helpers/arrayToString"
 import jsPDF from "jspdf"
 
 export type CreateProject = Pick<Projects, "title" | "description" | "problematic" | "objectives" | "features" | "constraints">
+export type UpdateProject = Partial<Pick<Projects, "title" | "description" | "problematic" | "objectives" | "features" | "constraints">>
 export const createProject = async (data: CreateProject) => {
     const response = await fetch('/api/projects', {
         method: 'POST',
@@ -40,7 +41,7 @@ export const deleteProject = async (projectId: string) => {
     return await response.json() as { message: string }
 }
 
-export const updateProject = async (projectId: string, data: Projects) => {
+export const updateProject = async (projectId: string, data: UpdateProject) => {
     const response = await fetch(`/api/projects/${projectId}`, {
         method: 'PUT',
         headers: {

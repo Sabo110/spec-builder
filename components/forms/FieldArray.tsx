@@ -41,7 +41,7 @@ export default function FieldArray<TFieldValues extends FieldValues>({
                 <FormItem>
                     <FormLabel>{label}</FormLabel>
 
-                    <div className="space-y-3 shadow-sm p-4 border border-gray-200 rounded-md grid grid-cols-2">
+                    <div className="space-y-3 shadow-sm p-4 border border-gray-200 rounded-md grid md:grid-cols-2">
                         {fields.map((item, index) => (
                             <FormField
                                 key={item.id}

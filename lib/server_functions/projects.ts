@@ -3,6 +3,7 @@ import { createAdminClient } from "../appwrite/server"
 import { ID } from "node-appwrite"
 
 type CreateProject = Pick<Projects, "title" | "description" | "problematic" | "objectives" | "features" | "constraints" | "user">
+type UpdateProject = Partial<Pick<Projects, "title" | "description" | "problematic" | "objectives" | "features" | "constraints">>
 export const createProject = async (data: CreateProject) => {
     try {
         const { tablesDB } = createAdminClient()
@@ -43,7 +44,7 @@ export const deleteProject = async (projectId: string) => {
     }
 }
 
-export const updateProject = async (projectId: string, data: Partial<Projects>) => {
+export const updateProject = async (projectId: string, data: UpdateProject) => {
     try {
         const { tablesDB } = createAdminClient()
         await tablesDB.updateRow({
