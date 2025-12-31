@@ -1,6 +1,6 @@
 import { Projects } from "@/types/appwrite"
 import { createAdminClient } from "../appwrite/server"
-import { ID } from "node-appwrite"
+import { ID, Query } from "node-appwrite"
 
 type CreateProject = Pick<Projects, "title" | "description" | "problematic" | "objectives" | "features" | "constraints" | "user">
 type UpdateProject = Partial<Pick<Projects, "title" | "description" | "problematic" | "objectives" | "features" | "constraints">>
@@ -18,12 +18,15 @@ export const createProject = async (data: CreateProject) => {
     }
 }
 
-export const getProjects = async () => {
+export const getProjects = async (userId: string) => {
     try {
         const { tablesDB } = createAdminClient()
         return (await tablesDB.listRows({
             databaseId: process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID!,
-            tableId: process.env.NEXT_PUBLIC_APPWRITE_PROJECTS_TABLE_ID!
+            tableId: process.env.NEXT_PUBLIC_APPWRITE_PROJECTS_TABLE_ID!,
+            queries: [
+                Query.equal("user", userId)
+            ]
         })).rows
     } catch (error) {
         return null

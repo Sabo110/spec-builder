@@ -21,6 +21,7 @@ export default function page() {
   const { data, isPending, error } = useQuery({
     queryKey: ["projects"],
     queryFn: getProjects,
+    staleTime: Infinity
   })
   const projectPreview = useProjectPreviewStore((state) => state.projectPreview)
   const setProjectPreview = useProjectPreviewStore((state) => state.setProjectPreview)
